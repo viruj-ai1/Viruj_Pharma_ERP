@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Achieve Pharma ERP</title>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="/styles/variables.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif']
+            },
+            colors: {
+              primary: {
+                '50': 'var(--color-primary-50)',
+                '100': 'var(--color-primary-100)',
+                '200': 'var(--color-primary-200)',
+                '300': 'var(--color-primary-300)',
+                '400': 'var(--color-primary-400)',
+                '500': 'var(--color-primary-500)',
+                '600': 'var(--color-primary-600)',
+                '700': 'var(--color-primary-700)',
+                '800': 'var(--color-primary-800)',
+                '900': 'var(--color-primary-900)',
+              },
+              accent: {
+                '500': 'var(--color-accent-500)',
+              },
+              ui: {
+                'background': 'var(--color-ui-background)',
+                'card': 'var(--color-ui-card)',
+                'border': 'var(--color-ui-border)',
+                'border-light': 'var(--color-ui-border-light)',
+              },
+              text: {
+                'primary': 'var(--color-text-primary)',
+                'secondary': 'var(--color-text-secondary)',
+                'muted': 'var(--color-text-muted)',
+              }
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "recharts": "https://aistudiocdn.com/recharts@^3.4.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-ui-background text-text-primary font-sans antialiased">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

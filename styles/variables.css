@@ -1,0 +1,49 @@
+:root {
+  /* Light Theme */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  --color-accent-500: #0d9488; /* Teal */
+
+  --color-ui-background: #f1f5f9; /* slate-100 */
+  --color-ui-card: #ffffff;
+  --color-ui-border: #e2e8f0; /* slate-200 */
+  --color-ui-border-light: #f1f5f9; /* slate-100 */
+
+  --color-text-primary: #1e293b; /* slate-800 */
+  --color-text-secondary: #475569; /* slate-600 */
+  --color-text-muted: #64748b; /* slate-500 */
+}
+
+.dark {
+  /* Dark Theme */
+  --color-primary-50: #1f2937;
+  --color-primary-100: #1f2937;
+  --color-primary-200: #374151;
+  --color-primary-300: #4b5563;
+  --color-primary-400: #60a5fa; /* Keep blue bright for accents */
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #3b82f6;
+  --color-primary-800: #60a5fa;
+  --color-primary-900: #93c5fd;
+
+  --color-accent-500: #2dd4bf; /* Bright Teal */
+  
+  --color-ui-background: #0f172a; /* slate-900 */
+  --color-ui-card: #1e293b; /* slate-800 */
+  --color-ui-border: #334155; /* slate-700 */
+  --color-ui-border-light: #475569; /* slate-600 */
+
+  --color-text-primary: #f1f5f9; /* slate-100 */
+  --color-text-secondary: #94a3b8; /* slate-400 */
+  --color-text-muted: #64748b; /* slate-500 */
+}

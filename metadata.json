@@ -1,0 +1,7 @@
+{
+  "name": "Pharma ERP",
+  "description": "A comprehensive, role-based ERP system for Achieve Pharma to digitize and manage operations across QA, QC, Production, Warehouse, and other key departments.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
