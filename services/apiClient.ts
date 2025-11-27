@@ -6,18 +6,16 @@
  */
 
 const resolveDefaultApiBaseUrl = () => {
-  if (typeof window === 'undefined') {
-    return 'http://localhost:8000';
-  }
+  const protocol =
+    typeof window !== 'undefined' && window.location.protocol === 'https:' ? 'https:' : 'http:';
+  const host =
+    typeof window !== 'undefined' && window.location.hostname ? window.location.hostname : 'localhost';
 
-  const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-  const host = window.location.hostname;
-  const frontendPort = window.location.port;
-  const port =
+  const configuredPort =
     (typeof import.meta !== 'undefined' && (import.meta as any)?.env?.VITE_API_PORT) ||
-    (frontendPort && frontendPort !== '' && frontendPort !== '3000' && frontendPort !== '5173'
-      ? frontendPort
-      : '8000');
+    (globalThis as any)?.VITE_API_PORT;
+
+  const port = configuredPort && `${configuredPort}`.trim() !== '' ? configuredPort : '8000';
 
   return `${protocol}//${host}:${port}`;
 };
@@ -152,7 +150,7 @@ export const authApi = {
   refreshToken: () => apiClient.post('/api/auth/refresh'),
 };
 
-type ApiUser = {
+export type ApiUser = {
   id: string;
   name: string;
   email: string;
@@ -160,12 +158,23 @@ type ApiUser = {
   department: string;
   plant_id?: string | null;
   is_active: boolean;
+  created_at?: string;
+  updated_at?: string | null;
+};
+
+export type UserCreatePayload = {
+  name: string;
+  email: string;
+  role: string;
+  department: string;
+  plant_id?: string | null;
+  password: string;
 };
 
 export const usersApi = {
   getAll: () => apiClient.get<ApiUser[]>('/api/users'),
   getById: (id: string) => apiClient.get<ApiUser>(`/api/users/${id}`),
-  create: (user: Partial<ApiUser>) => apiClient.post<ApiUser>('/api/users', user),
+  create: (user: UserCreatePayload) => apiClient.post<ApiUser>('/api/users', user),
   update: (id: string, user: Partial<ApiUser>) => apiClient.put<ApiUser>(`/api/users/${id}`, user),
   delete: (id: string) => apiClient.delete(`/api/users/${id}`),
 };
