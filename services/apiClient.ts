@@ -14,7 +14,7 @@ const resolveDefaultApiBaseUrl = () => {
   const host = window.location.hostname;
   const frontendPort = window.location.port;
   const port =
-    import.meta.env.VITE_API_PORT ||
+    (typeof import.meta !== 'undefined' && (import.meta as any)?.env?.VITE_API_PORT) ||
     (frontendPort && frontendPort !== '' && frontendPort !== '3000' && frontendPort !== '5173'
       ? frontendPort
       : '8000');
@@ -22,9 +22,13 @@ const resolveDefaultApiBaseUrl = () => {
   return `${protocol}//${host}:${port}`;
 };
 
+const apiBaseEnv =
+  (typeof import.meta !== 'undefined' && (import.meta as any)?.env?.VITE_API_BASE_URL) ||
+  (globalThis as any)?.VITE_API_BASE_URL;
+
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL?.trim() !== ''
-    ? import.meta.env.VITE_API_BASE_URL
+  apiBaseEnv && typeof apiBaseEnv === 'string' && apiBaseEnv.trim() !== ''
+    ? apiBaseEnv
     : resolveDefaultApiBaseUrl();
 
 interface ApiResponse<T> {
