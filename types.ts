@@ -7,7 +7,8 @@ export enum Department {
   Admin = "Administration",
   Sales = "Sales",
   Corporate = "Corporate",
-  Finance = "Finance"
+  Finance = "Finance",
+  Security = "Security"
 }
 
 export enum Role {
@@ -37,6 +38,9 @@ export enum Role {
   System_Admin = "System Admin",
   Plant_Head = "Plant Head",
   Management = "Management",
+
+  // Security
+  Security_Officer = "Security Officer",
 
   // Sales
   Sales_Person = "Sales Person"

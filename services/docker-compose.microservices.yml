@@ -1,0 +1,141 @@
+version: '3.8'
+
+services:
+  # Infrastructure Services
+  postgres:
+    image: postgres:16
+    container_name: viruj_postgres
+    environment:
+      POSTGRES_DB: viruj_erp
+      POSTGRES_USER: viruj_app
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U viruj_app"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: viruj_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: viruj_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-admin}
+    ports:
+      - "5672:5672"
+      - "15672:15672"  # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Microservices
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: viruj_auth_service
+    environment:
+      DATABASE_URL: postgresql://viruj_app:${POSTGRES_PASSWORD:-password}@postgres:5432/viruj_erp
+      SECRET_KEY: ${SECRET_KEY:-your-secret-key}
+      AUTH_SERVICE_PORT: 8001
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - viruj_network
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: viruj_user_service
+    environment:
+      DATABASE_URL: postgresql://viruj_app:${POSTGRES_PASSWORD:-password}@postgres:5432/viruj_erp
+      AUTH_SERVICE_URL: http://auth-service:8001
+      USER_SERVICE_PORT: 8002
+    ports:
+      - "8002:8002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+    networks:
+      - viruj_network
+
+  production-service:
+    build:
+      context: ./production-service
+      dockerfile: Dockerfile
+    container_name: viruj_production_service
+    environment:
+      DATABASE_URL: postgresql://viruj_app:${POSTGRES_PASSWORD:-password}@postgres:5432/viruj_erp
+      REDIS_URL: redis://redis:6379/0
+      RABBITMQ_URL: amqp://admin:${RABBITMQ_PASSWORD:-admin}@rabbitmq:5672/
+      AUTH_SERVICE_URL: http://auth-service:8001
+      PRODUCTION_SERVICE_PORT: 8003
+    ports:
+      - "8003:8003"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - viruj_network
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: viruj_api_gateway
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:8001
+      USER_SERVICE_URL: http://user-service:8002
+      PRODUCTION_SERVICE_URL: http://production-service:8003
+      FRONTEND_URL: http://localhost:5173
+      GATEWAY_PORT: 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - auth-service
+      - user-service
+      - production-service
+    networks:
+      - viruj_network
+
+networks:
+  viruj_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+
