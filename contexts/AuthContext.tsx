@@ -14,8 +14,10 @@ interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Check if we should use API or mock data
-const USE_API = import.meta.env.VITE_USE_API === 'true' || import.meta.env.VITE_API_BASE_URL;
+// Check if we should use API or mock data.
+// Default to using the live API unless explicitly disabled via VITE_USE_API=false
+const useApiEnv = import.meta.env.VITE_USE_API;
+const USE_API = useApiEnv === undefined ? true : useApiEnv === 'true' || useApiEnv === true;
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);

@@ -5,7 +5,27 @@
  * including authentication, error handling, and response parsing.
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const resolveDefaultApiBaseUrl = () => {
+  if (typeof window === 'undefined') {
+    return 'http://localhost:8000';
+  }
+
+  const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+  const host = window.location.hostname;
+  const frontendPort = window.location.port;
+  const port =
+    import.meta.env.VITE_API_PORT ||
+    (frontendPort && frontendPort !== '' && frontendPort !== '3000' && frontendPort !== '5173'
+      ? frontendPort
+      : '8000');
+
+  return `${protocol}//${host}:${port}`;
+};
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL?.trim() !== ''
+    ? import.meta.env.VITE_API_BASE_URL
+    : resolveDefaultApiBaseUrl();
 
 interface ApiResponse<T> {
   data?: T;
