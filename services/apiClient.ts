@@ -148,11 +148,21 @@ export const authApi = {
   refreshToken: () => apiClient.post('/api/auth/refresh'),
 };
 
+type ApiUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  department: string;
+  plant_id?: string | null;
+  is_active: boolean;
+};
+
 export const usersApi = {
-  getAll: () => apiClient.get('/api/users'),
-  getById: (id: string) => apiClient.get(`/api/users/${id}`),
-  create: (user: unknown) => apiClient.post('/api/users', user),
-  update: (id: string, user: unknown) => apiClient.put(`/api/users/${id}`, user),
+  getAll: () => apiClient.get<ApiUser[]>('/api/users'),
+  getById: (id: string) => apiClient.get<ApiUser>(`/api/users/${id}`),
+  create: (user: Partial<ApiUser>) => apiClient.post<ApiUser>('/api/users', user),
+  update: (id: string, user: Partial<ApiUser>) => apiClient.put<ApiUser>(`/api/users/${id}`, user),
   delete: (id: string) => apiClient.delete(`/api/users/${id}`),
 };
 
