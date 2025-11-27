@@ -66,6 +66,7 @@ def main() -> int:
     else:
         python_exec = sys.executable
 
+    backend_host = os.getenv("BACKEND_HOST", "0.0.0.0")
     backend_port = os.getenv("BACKEND_PORT", "8000")
     frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
     database_url = os.getenv("DATABASE_URL", "postgresql://viruj_app:password@localhost:5432/viruj_erp")
@@ -84,6 +85,8 @@ def main() -> int:
         "uvicorn",
         "main:app",
         "--reload",
+        "--host",
+        backend_host,
         "--port",
         backend_port,
     ]
@@ -94,7 +97,7 @@ def main() -> int:
     print(f"\n{'='*60}")
     print(f"🚀 Starting Viruj Pharma ERP")
     print(f"{'='*60}")
-    print(f"📡 Backend API: http://localhost:{backend_port}")
+    print(f"📡 Backend API: http://{backend_host}:{backend_port}")
     print(f"🌐 Frontend Interface: {frontend_url}")
     print(f"📚 API Docs: http://localhost:{backend_port}/docs")
     print(f"{'='*60}\n")
