@@ -115,7 +115,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isSidebarO
       case Role.QC_Manager: return renderSectionedNav(qcManagerNavSections);
       case Role.QC_Operator: return <> {globalLinks} {renderSectionedNav(qcOperatorNavSections)} </>;
       case Role.Procurement_Officer: return <> {globalLinks} {renderSectionedNav(procOfficerNavSections)} </>;
-      case Role.Warehouse_Manager: return renderSectionedNav(warehouseManagerNavSections);
+      case Role.Warehouse_Manager: return <> {globalLinks} {renderSectionedNav(warehouseManagerNavSections)} </>;
       default: return renderLinks(filteredNavLinks);
     }
   }
